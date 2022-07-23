@@ -4,12 +4,13 @@ import android.accounts.AbstractAccountAuthenticator
 import android.accounts.Account
 import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
-import android.accounts.NetworkErrorException
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import com.beok.accountmanagersample.ui.MainActivity
 
-class SampleAuthenticator(context: Context) : AbstractAccountAuthenticator(context) {
+class SampleAuthenticator(private val context: Context) : AbstractAccountAuthenticator(context) {
 
     override fun editProperties(
         response: AccountAuthenticatorResponse,
@@ -22,7 +23,14 @@ class SampleAuthenticator(context: Context) : AbstractAccountAuthenticator(conte
         authTokenType: String?,
         requiredFeatures: Array<out String>?,
         options: Bundle?
-    ): Bundle = bundleOf()
+    ): Bundle {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType)
+            putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
+        }
+
+        return bundleOf(AccountManager.KEY_INTENT to intent)
+    }
 
     override fun confirmCredentials(
         response: AccountAuthenticatorResponse,

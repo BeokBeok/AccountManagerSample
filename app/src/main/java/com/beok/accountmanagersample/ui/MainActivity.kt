@@ -51,6 +51,8 @@ class MainActivity : ComponentActivity() {
                     )
                     Button(onClick = {
                         viewModel.login(email, password)
+                        setResult(RESULT_OK)
+                        finish()
                     }) {
                         Text(text = "로그인")
                     }
